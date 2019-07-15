@@ -4,6 +4,13 @@ This documentation is for the v0 realtime api. During v0, changes to implementat
 
 The realtime uses the HTTP WebSocket Protocol, defined by [RFC 6455](https://tools.ietf.org/html/rfc6455), to send and recieve messages. Any client libraries that implement support for the defined protocol should be able to interface with this library. The server itself uses the Go implementation [Gorilla Websocket](https://github.com/gorilla/websocket).
 
+### Accessing the Realtime API
+
+The realtime api is accessible by using a websocket client to connect to the following address. No authentication or other initiation is required at this time, but is intended for the future.
+```bash
+ws://$HOSTNAME:$PORT/api
+```
+
 ### User Sent Messages
 There are 3 kinds of acceptable sent messages over the realtime api. The method message, the lookup message, and the subscribe message.
 
