@@ -8,7 +8,7 @@ The realtime uses the HTTP WebSocket Protocol, defined by [RFC 6455](https://too
 
 The realtime api is accessible by using a websocket client to connect to the following address. No authentication or other initiation is required at this time, but is intended for the future.
 ```bash
-ws://$HOSTNAME:$PORT/api
+ws://$HOSTNAME:$PORT/api/v0/realtime
 ```
 
 ### User Sent Messages
