@@ -1,5 +1,7 @@
 # Websocket Protocol
 
+This documentation is for the v0 websocket api. During v0, changes to implementation are expected and all messages are subject to change.
+
 ### User Sent Messages
 There are 3 kinds of acceptable sent messages over the websocket protocol. The method message, the lookup message, and the subscribe message.
 
