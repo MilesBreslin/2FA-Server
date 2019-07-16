@@ -52,6 +52,7 @@ func HandleServe(w http.ResponseWriter, r *http.Request) {
             // Handle Different Types of Messages
             switch msg.Type {
             case "method":
+                // If method name exists, use it
                 if m, ok := methods.Get(msg.Method); ok {
                     reply.Obj, reply.Result = m(msg.Obj)
                 } else {

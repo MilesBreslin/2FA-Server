@@ -1,7 +1,7 @@
 package methods
 
 func init() {
-	//m.description = "Test if methods work"
+	// Actually add the method to the global list
 	Add("test",test_method)
 }
 
