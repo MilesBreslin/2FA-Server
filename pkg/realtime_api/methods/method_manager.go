@@ -4,7 +4,7 @@ type method func([]interface{}) ([]interface{}, uint16)
 
 var methods map[string]method
 
-func add(n string, m method) {
+func Add(n string, m method) {
     if methods == nil {
         methods = make(map[string]method)
     }
