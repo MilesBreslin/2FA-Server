@@ -3,6 +3,7 @@ package realtime_api
 import (
     "encoding/json"
     "github.com/gorilla/websocket"
+    "./methods"
     "net/http"
     "log"
 )
@@ -50,6 +51,15 @@ func HandleServe(w http.ResponseWriter, r *http.Request) {
         if msg.Type != "" && msg.Id != 0 {
             // Handle Different Types of Messages
             switch msg.Type {
+            case "method":
+                if m, ok := methods.Get(msg.Method); ok {
+                    reply.Obj, reply.Result = m(msg.Obj)
+                } else {
+                    reply.Result = 400
+                }
+            case "lookup":
+                log.Println("Lookup")
+                reply.Result = 200
             case "subscribe":
                 log.Println("Subscribe")
                 reply.Result = 202
