@@ -35,15 +35,14 @@ func HandleServe(w http.ResponseWriter, r *http.Request) {
             log.Println(err)
         }
 
-        log.Println(msg)
+        var reply outgoingMessage
+        reply.Id = msg.Id
         switch msg.Type {
         case "subscribe":
             log.Println("Subscribe")
-            var reply outgoingMessage
-            reply.Id = msg.Id
             reply.Result = 202
-            replyRaw, _ := json.Marshal(&reply)
-            ws.WriteMessage(1, replyRaw)
         }
+        replyRaw, _ := json.Marshal(&reply)
+        ws.WriteMessage(websocket.TextMessage, replyRaw)
     }
 }
