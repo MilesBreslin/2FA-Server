@@ -7,7 +7,7 @@ import (
 )
 
 func main() {
-	http.HandleFunc("/websocket", handleWebsocket)
+	http.HandleFunc("/api/v0/realtime", handleWebsocket)
 	http.Handle("/", http.FileServer(http.Dir("./web/")))
 	http.ListenAndServe(":8000", nil)
 }
