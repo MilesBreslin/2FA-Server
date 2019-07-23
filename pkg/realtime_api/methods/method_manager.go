@@ -1,6 +1,6 @@
 package methods
 
-import log
+import "log"
 
 type method func([]interface{}) ([]interface{}, uint16)
 
