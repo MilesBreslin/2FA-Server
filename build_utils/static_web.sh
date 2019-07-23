@@ -7,7 +7,7 @@ FILE="$1"
 FILE_NOPREFIX="${1/*web/}"
 FILE_SCRUBBED="${FILE//[^0-9a-zA-Z]/_}"
 {
-    sed 's/`/\\&/g;s/%/\\&/g' "$1"
+    sed 's/`/\\&/g' "$1"
 } | {
     echo "package web_build"
     echo 'import (
