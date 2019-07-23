@@ -7,11 +7,13 @@
     cat "$1"
 } | {
     echo "package web_built"
-    echo -n 'const file = `'
+    echo 'import (
+        "net/http"
+        "fmt"
+    )'
+    echo -n 'const static = `'
     cat
     echo '`'
-    echo 'import http'
-    echo 'import fmt'
     echo "func init() {
         http.HandleFunc(\"${1/*web/}\", func(w http.ResponseWriter, r *http.Request) {
             fmt.Fprintf(w, static)
