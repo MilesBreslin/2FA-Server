@@ -6,7 +6,7 @@
 {
     cat "$1"
 } | {
-    echo "package web_built"
+    echo "package web_build"
     echo 'import (
         "net/http"
         "fmt"
