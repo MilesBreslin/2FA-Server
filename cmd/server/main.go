@@ -3,6 +3,7 @@ package main
 import (
 	"net/http"
     "../../pkg/realtime_api"
+    _ "../../pkg/static_web"
 )
 
 func main() {

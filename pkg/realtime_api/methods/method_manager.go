@@ -1,5 +1,7 @@
 package methods
 
+import log
+
 type method func([]interface{}) ([]interface{}, uint16)
 
 var methods map[string]method
