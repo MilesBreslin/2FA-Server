@@ -58,7 +58,7 @@ func getHOTPToken(secret string, interval int64) string {
   return fmt.Sprintf("%06d",h12)
 }
 
-func getTOTPToken(secret string) string {
+func GetTOTPToken(secret string) string {
   //The TOTP token is just a HOTP token seeded with every 30 seconds.
   interval := time.Now().Unix() / 30
   return getHOTPToken(secret, interval)
