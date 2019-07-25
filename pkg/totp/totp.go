@@ -1,6 +1,6 @@
 // help from
 // https://blog.gojekengineering.com/a-diy-two-factor-authenticator-in-golang-32e5641f6ec5
-package hmac
+package totp
 
 import (
   "bytes"
