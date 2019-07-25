@@ -1,6 +1,6 @@
 // help from
 // https://blog.gojekengineering.com/a-diy-two-factor-authenticator-in-golang-32e5641f6ec5
-package main
+package hmac
 
 import (
   "bytes"
@@ -62,10 +62,5 @@ func getTOTPToken(secret string) string {
   //The TOTP token is just a HOTP token seeded with every 30 seconds.
   interval := time.Now().Unix() / 30
   return getHOTPToken(secret, interval)
-}
-
-func main() {
-  password := getTOTPToken("lhe4kfhfqapxipzmohswb6i5adg2gauh")
-  fmt.Println(password)
 }
 
