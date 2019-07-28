@@ -8,6 +8,7 @@ func init() {
     // Actually add the method to the global list
     Add("AddKey",addKey_method)
     Add("GetKey",getKey_method)
+    Add("ListKeys",listKeys_method)
 }
 
 func addKey_method(in []interface{}) ([]interface{}, uint16) {
@@ -45,6 +46,15 @@ func getKey_method(in []interface{}) ([]interface{}, uint16) {
         } else {
             return nil, 400
         }
+    }
+    return out, 200
+}
+
+func listKeys_method(in []interface{}) ([]interface{}, uint16) {
+    list := keys.GetList()
+    out := make([]interface{},len(list))
+    for index, val := range list {
+        out[index] = val
     }
     return out, 200
 }
