@@ -19,6 +19,7 @@ var add chan *key
 var del chan uint64
 var get chan keyRequest
 var getId chan uint64
+var getList chan chan []uint64
 var keyChain map[uint64] *key
 
 func init() {
@@ -26,6 +27,7 @@ func init() {
     del = make(chan uint64, 0)
     get = make(chan keyRequest)
     getId = make(chan uint64)
+    getList = make(chan chan []uint64)
     keyChain = make(map[uint64] *key)
     go handleKeys()
 }
@@ -44,6 +46,15 @@ func handleKeys() {
             } else {
                 close(transport.Result)
             }
+        case transport := <- getList:
+            list := make([]uint64, len(keyChain))
+
+            i:=0
+            for id := range keyChain {
+                list[i] = id
+                i++
+            }
+            transport <- list
         case getId <- new_id:
             new_id = new_id+1
         }
@@ -65,6 +76,7 @@ func GetKey(id uint64) (*key, error) {
         Id: id,
     }
     if k, alive := <- result; alive {
+        close(result)
         return k, nil
     } else {
         return nil, errors.New("Key not found")
@@ -82,4 +94,11 @@ func AddKey(secret string) (*key) {
     }
     add <- &key
     return &key
+}
+
+func GetList() ([]uint64) {
+    result := make(chan []uint64, 0)
+    defer close(result)
+    getList <- result
+    return <- result
 }
