@@ -10,11 +10,13 @@ type key struct {
     Id              uint64              `json:"Id"`
 }
 
+// See GetKey
 type keyRequest struct {
     Result          chan *key
     Id              uint64
 }
 
+// Declare Global Channels + KeyChain
 var add chan *key
 var del chan uint64
 var get chan keyRequest
@@ -23,38 +25,58 @@ var getList chan chan []uint64
 var keyChain map[uint64] *key
 
 func init() {
+    // Initialize Global Channels + KeyChain
     add = make(chan *key, 0)
     del = make(chan uint64, 0)
-    get = make(chan keyRequest)
-    getId = make(chan uint64)
-    getList = make(chan chan []uint64)
+    get = make(chan keyRequest, 0)
+    getId = make(chan uint64, 4)
+    getList = make(chan chan []uint64, 0)
     keyChain = make(map[uint64] *key)
+
+    // Start Handling the Channel Requests
     go handleKeys()
 }
 
+// All Read/Writes to keyChain MUST go through this single thread
+// Or potential difficult to reproduce runtime panics are created
 func handleKeys() {
+    // Assume first key is ID 1
     new_id := uint64(1)
+
+    // Loop forever
     for {
-        select {
+        select {    // Block until any one of these threads has a message
+        // See DelKey
         case id := <- del:
             delete(keyChain, id)
+
+        // See AddKey
         case k := <- add:
             keyChain[k.Id] = k
+
+        // See GetKey
         case transport := <- get:
             if val, ok := keyChain[transport.Id]; ok {
                 transport.Result <- val
             } else {
                 close(transport.Result)
             }
-        case transport := <- getList:
-            list := make([]uint64, len(keyChain))
 
+        // See GetList
+        case transport := <- getList:
+            // Declare a list with static size
+            list := make([]uint64, len(keyChain))
+            // Iterate through all 
             i:=0
             for id := range keyChain {
                 list[i] = id
                 i++
             }
             transport <- list
+
+        // See getUID
+        // Generate a new, unique ID
+        // Maybe it should be more difficult to predict
         case getId <- new_id:
             new_id = new_id+1
         }

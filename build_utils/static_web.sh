@@ -7,8 +7,10 @@ FILE="$1"
 FILE_NOPREFIX="${1/*web/}"
 FILE_SCRUBBED="${FILE//[^0-9a-zA-Z]/_}"
 {
+    # Scrub file
     sed 's/`/\\&/g' "$1"
 } | {
+    # Convert string to golang
     echo "package web_build"
     echo 'import (
         "net/http"
@@ -23,3 +25,4 @@ FILE_SCRUBBED="${FILE//[^0-9a-zA-Z]/_}"
         })
     }"
 } | tee "$2"
+# Write to file and stdout

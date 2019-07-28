@@ -13,10 +13,12 @@ func init() {
 
 func addKey_method(in []interface{}) ([]interface{}, uint16) {
     out := make([]interface{}, 0)
+    // For each object in the array, ensure it has "secret" as type string
     for _, obj := range in {
         if secret, ok := obj.(map[string]interface{})["secret"]; ok {
             switch secret.(type) {
             case string:
+                // Add the Key and append its Id to the output array
                 k := keys.AddKey(secret.(string))
                 out = append(out, k.Id)
             default:
@@ -31,10 +33,12 @@ func addKey_method(in []interface{}) ([]interface{}, uint16) {
 
 func getKey_method(in []interface{}) ([]interface{}, uint16) {
 	out := make([]interface{}, 0)
+    // For each object in the array, ensure it has "id" as type float64 (JSON default for a map)
     for _, obj := range in {
         if id, ok := obj.(map[string]interface{})["id"]; ok {
             switch id.(type) {
             case float64:
+                // Retrieve key, return 404 if no exist, and append key to output array
                 k, err := keys.GetKey(uint64(id.(float64)))
                 if err != nil {
                 	return nil, 404
@@ -51,7 +55,10 @@ func getKey_method(in []interface{}) ([]interface{}, uint16) {
 }
 
 func listKeys_method(in []interface{}) ([]interface{}, uint16) {
+    // No input parameters, just return the list
     list := keys.GetList()
+
+    // Convert []uint64 to []interface{}
     out := make([]interface{},len(list))
     for index, val := range list {
         out[index] = val
