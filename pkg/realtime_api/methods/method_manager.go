@@ -14,8 +14,7 @@ func Add(n string, m method) {
 }
 
 func Get(n string) (method, bool) {
-    log.Println("get"+n)
-    log.Println(methods)
+    log.Println("get "+n)
     m, ok := methods[n]
     return m, ok
 }
