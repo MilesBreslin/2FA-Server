@@ -6,18 +6,18 @@ import (
 )
 
 type key struct {
-    Secret          string              `json:"Secret"`
-    Id              uint64              `json:"Id"`
+    Secret          string              `json:"secret"`
+    Id              uint64              `json:"id"`
 }
 
 // See GetKey
 type keyRequest struct {
-    Result          chan *key
+    Result          chan key
     Id              uint64
 }
 
 // Declare Global Channels + KeyChain
-var add chan *key
+var add chan key
 var del chan uint64
 var get chan keyRequest
 var getId chan uint64
@@ -26,7 +26,7 @@ var keyChain map[uint64] *key
 
 func init() {
     // Initialize Global Channels + KeyChain
-    add = make(chan *key, 0)
+    add = make(chan key, 0)
     del = make(chan uint64, 0)
     get = make(chan keyRequest, 0)
     getId = make(chan uint64, 4)
@@ -52,12 +52,12 @@ func handleKeys() {
 
         // See AddKey
         case k := <- add:
-            keyChain[k.Id] = k
+            keyChain[k.Id] = &k
 
         // See GetKey
         case transport := <- get:
             if val, ok := keyChain[transport.Id]; ok {
-                transport.Result <- val
+                transport.Result <- *val
             } else {
                 close(transport.Result)
             }
@@ -92,14 +92,14 @@ func (k *key) GetCode() (string, error) {
 }
 
 func GetKey(id uint64) (*key, error) {
-    result := make(chan *key, 0)
+    result := make(chan key, 0)
     get <- keyRequest {
         Result: result,
         Id: id,
     }
     if k, alive := <- result; alive {
         close(result)
-        return k, nil
+        return &k, nil
     } else {
         return nil, errors.New("Key not found")
     }
@@ -114,7 +114,7 @@ func AddKey(secret string) (*key) {
         Secret: secret,
         Id: getUID(),
     }
-    add <- &key
+    add <- key
     return &key
 }
 
