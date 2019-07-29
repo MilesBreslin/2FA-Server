@@ -2,8 +2,8 @@ package main
 
 import (
 	"net/http"
-    "../../pkg/realtime_api/server"
-    _ "../../pkg/static_web"
+    "github.com/opensource2fa/pkg/realtime_api/server"
+    _ "github.com/opensource2fa/pkg/static_web"
 )
 
 func main() {

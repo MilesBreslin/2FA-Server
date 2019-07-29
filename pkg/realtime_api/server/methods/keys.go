@@ -1,8 +1,8 @@
 package methods
 
 import (
-    "../../../keys/keychain"
-    "../../../status_codes"
+    "github.com/opensource2fa/pkg//keys/keychain"
+    "github.com/opensource2fa/pkg/status_codes"
 )
 
 func init() {

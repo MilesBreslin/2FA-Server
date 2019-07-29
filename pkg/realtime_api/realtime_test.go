@@ -1,8 +1,8 @@
 package realtime_api
 
 import (
-    "./client"
-    "./server"
+    "github.com/opensource2fa/pkg/realtime_api/client"
+    "github.com/opensource2fa/pkg/realtime_api/server"
     "testing"
     "net/http/httptest"
     "net/http"

@@ -1,7 +1,7 @@
 package keys
 
 import (
-    "../totp"
+    "github.com/opensource2fa/pkg/totp"
 )
 
 type Key struct {

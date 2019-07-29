@@ -1,12 +1,12 @@
 package server
 
 import (
-    "../common"
-    "../../status_codes"
-    "../../keys/keychain"
+    "github.com/opensource2fa/pkg/realtime_api/common"
+    "github.com/opensource2fa/pkg/status_codes"
+    "github.com/opensource2fa/pkg/keys/keychain"
     "encoding/json"
     "github.com/gorilla/websocket"
-    "./methods"
+    "github.com/opensource2fa/pkg/realtime_api/methods"
     "net/http"
     "log"
     "time"

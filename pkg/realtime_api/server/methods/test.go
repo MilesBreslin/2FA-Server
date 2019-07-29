@@ -1,7 +1,7 @@
 package methods
 
 import (
-    "../../../status_codes"
+    "github.com/opensource2fa/pkg/status_codes"
 )
 
 func init() {
