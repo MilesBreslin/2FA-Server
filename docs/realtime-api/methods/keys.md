@@ -37,13 +37,44 @@ Server Message
     "type":"result",
     "result": 200,
     "obj": [
-        KeyObjects
+        ... KeyObjects
     ],
     "id": n
 }
 ```
 
 `KeyObjects` are defined at the top of this document.
+
+### GetKeyToken Method
+Retrieves a list of keys by keyids.
+
+Client Message
+```json
+{
+    "type":"method",
+    "method": "GetKeyToken",
+    "obj": [
+        ... KeyIds
+    ],
+    "id": n
+}
+```
+
+`KeyIds` are integers which represents a reference to the key.
+
+Server Message
+```json
+{
+    "type":"result",
+    "result": 200,
+    "obj": [
+        ... Tokens
+    ],
+    "id": n
+}
+```
+
+`Tokens` are strings which represent a time based token derived from the given key.
 
 ### ListKeys Method
 Lists all valid key ids.
@@ -78,7 +109,7 @@ Client Message
 ```json
 {
     "type":"method",
-    "method": "ListKeys",
+    "method": "AddKey",
     "obj": [
         {
             "secret": SomeSecret
@@ -112,7 +143,7 @@ Client Message
 ```json
 {
     "type":"method",
-    "method": "ListKeys",
+    "method": "GetTOTPToken",
     "obj": [
         ... SomeSecrets
     ],
