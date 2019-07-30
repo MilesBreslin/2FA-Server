@@ -14,6 +14,10 @@ if [ "$1" == "test" ]; then
     exit 0
 elif [ "$1" == "deps" ]; then
     go get github.com/gorilla/websocket
+elif [ "$1" == "fromscratch" ]; then
+    ./build.sh deps || exit 1
+    ./build.sh test || exit 1
+    ./build.sh || exit 1
 elif ! [ -z "$1" ]; then
     echo "./build.sh test"
     echo $'\t' "Runs all tests on the code"
