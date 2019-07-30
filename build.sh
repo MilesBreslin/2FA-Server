@@ -1,5 +1,29 @@
 #!/usr/bin/env bash
 
+testDir() {
+    init_dir="$PWD"
+    cd "$1"
+    go test .
+    [ "$?" == "0" ] || exit "1"
+    cd "$init_dir"
+}
+
+if [ "$1" == "test" ]; then
+    testDir pkg/keys
+    testDir pkg/totp
+    exit 0
+elif [ "$1" == "deps" ]; then
+    go get github.com/gorilla/websocket
+elif ! [ -z "$1" ]; then
+    echo "./build.sh test"
+    echo $'\t' "Runs all tests on the code"
+    echo "./build.sh deps"
+    echo $'\t' "Download all dependencies"
+    echo "./build.sh"
+    echo $'\t' "Builds all of the code"
+    exit 0
+fi
+
 mkdir web_build 2>/dev/null
 
 rm -rf web_build/* 2>/dev/null
