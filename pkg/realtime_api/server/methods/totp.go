@@ -1,7 +1,7 @@
 package methods
 
 import (
-    "../../totp"
+    "../../../totp"
 )
 
 func init() {

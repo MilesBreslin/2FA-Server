@@ -1,6 +1,7 @@
-package realtime_api
+package server
 
 import (
+    "../common"
     "encoding/json"
     "github.com/gorilla/websocket"
     "./methods"
@@ -33,12 +34,12 @@ func HandleServe(w http.ResponseWriter, r *http.Request) {
         }
 
         // Create Basic Reply Message
-        var reply outgoingMessage
+        var reply common.OutgoingMessage
         reply.Type = "result"
         reply.Result = 500
 
         // Check if is Valid JSON and convert to incommingMessage structure
-        var msg incommingMessage
+        var msg common.IncommingMessage
         err = json.Unmarshal(raw, &msg)
         if err != nil {
             log.Println(err)

@@ -1,7 +1,7 @@
 package methods
 
 import (
-    "../../keys"
+    "../../../keys"
 )
 
 func init() {

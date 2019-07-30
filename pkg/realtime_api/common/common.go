@@ -1,13 +1,13 @@
-package realtime_api
+package common
 
-type incommingMessage struct {
+type IncommingMessage struct {
     Type        string          `json:"type"`
     Method      string          `json:"method,omitempty"`
     Obj         []interface{}   `json:"obj,omitempty"`
     Id          uint64          `json:"id"`
 }
 
-type outgoingMessage struct {
+type OutgoingMessage struct {
     Type        string          `json:"type"`
     Result      uint16          `json:"result,omitempty"`
     Obj         []interface{}   `json:"obj,omitempty"`
