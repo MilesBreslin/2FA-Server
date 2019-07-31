@@ -13,6 +13,7 @@ type client struct {
     methodAdd       chan methodAdd
     methodReceive   chan *common.OutgoingMessage
     methodsRunning  map[uint64] chan interface{}
+    newUID          chan uint64
 }
 
 type methodAdd struct {
@@ -34,6 +35,7 @@ func NewClient(url string) (*client, error) {
     c.quit = make(chan struct{}, 0)
     c.methodAdd = make(chan methodAdd, 0)
     c.methodReceive = make(chan *common.OutgoingMessage, 0)
+    c.newUID = make(chan uint64, 5)
     c.methodsRunning = make(map[uint64]interface{})
 
     go c.handleClient()
@@ -42,6 +44,13 @@ func NewClient(url string) (*client, error) {
 
 func (c *client) handleClient() {
     defer c.ws.Close()
+
+    // Generate New UIDs
+    go func() {
+        for i := uint64(0); ; i++ {
+            newUID <- i
+        }
+    }
 
     // Method Handler Thread
     go func() {
@@ -100,6 +109,10 @@ func (c *client) handleClient() {
     <-c.quit
 }
 
+func getUID() (uint64) {
+    return <- newUID
+}
+
 func (c *client) runMethod(method string, obj []interface{}) ([]interface{}, uint16) {
     var send IncommingMessage
     send.Type = "method"
@@ -115,4 +128,7 @@ func (c *client) runMethod(method string, obj []interface{}) ([]interface{}, uin
     c.methodAdd <- methodRequest
     <- methodRequest.added
     c.send <- send
+
+    msg := <- methodRequest.result
+    return msg.Obj, msg.Result
 }
