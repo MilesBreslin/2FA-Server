@@ -8,7 +8,7 @@ import (
     "encoding/json"
 )
 
-type client struct {
+type Client struct {
     ws              *websocket.Conn
     send            chan interface{}
     quit            chan struct{}
@@ -23,8 +23,8 @@ type methodAdd struct {
     id              uint64
 }
 
-func NewClient(url string) (*client, error) {
-    var c client
+func NewClient(url string) (*Client, error) {
+    var c Client
     // url example : "ws://localhost:8000/api/v0/realtime"
     ws, _, err := websocket.DefaultDialer.Dial(url, nil)
     c.ws = ws
@@ -44,7 +44,7 @@ func NewClient(url string) (*client, error) {
     return &c, nil
 }
 
-func (c *client) handleClient() {
+func (c *Client) handleClient() {
     defer c.ws.Close()
 
     // Generate New UIDs
@@ -111,11 +111,11 @@ func (c *client) handleClient() {
     <-c.quit
 }
 
-func (c *client) getUID() (uint64) {
+func (c *Client) getUID() (uint64) {
     return <- c.newUID
 }
 
-func (c *client) runMethod(method string, obj []interface{}) ([]interface{}, uint16) {
+func (c *Client) runMethod(method string, obj []interface{}) ([]interface{}, uint16) {
     var send common.IncommingMessage
     send.Type = "method"
     send.Method = method
