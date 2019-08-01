@@ -11,6 +11,7 @@ testDir() {
 if [ "$1" == "test" ]; then
     testDir pkg/keys
     testDir pkg/totp
+    testDir pkg/realtime_api
     exit 0
 elif [ "$1" == "deps" ]; then
     go get github.com/gorilla/websocket

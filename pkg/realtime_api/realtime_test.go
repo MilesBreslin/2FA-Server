@@ -4,15 +4,15 @@ import (
     "./client"
     "./server"
     "testing"
+    "net/http/httptest"
     "net/http"
-    "time"
 )
 
 func startClientServer() (*client.Client, error) {
-    http.HandleFunc("/realtime", server.HandleServe)
-    go http.ListenAndServe(":8000", nil)
-    time.Sleep(5 * time.Second)
-    c, err := client.NewClient("ws://127.0.0.1:8000/realtime")
+    s := httptest.NewServer(http.HandlerFunc(server.HandleServe))
+    defer s.Close()
+    url := "ws" + s.URL[4:]
+    c, err := client.NewClient(url)
     return c, err
 }
 
