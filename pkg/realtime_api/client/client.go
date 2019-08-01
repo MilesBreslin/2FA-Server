@@ -4,28 +4,30 @@ import (
     "../common"
     "github.com/gorilla/websocket"
     "log"
+    "errors"
+    "encoding/json"
 )
 
 type client struct {
-    ws              websocket.Conn
+    ws              *websocket.Conn
     send            chan interface{}
     quit            chan struct{}
     methodAdd       chan methodAdd
     methodReceive   chan *common.OutgoingMessage
-    methodsRunning  map[uint64] chan interface{}
+    methodsRunning  map[uint64] chan common.OutgoingMessage
     newUID          chan uint64
 }
 
 type methodAdd struct {
-    result          chan interface{}
+    result          chan common.OutgoingMessage
     id              uint64
-    added           chan struct{}
 }
 
 func NewClient(url string) (*client, error) {
     var c client
     // url example : "ws://localhost:8000/api/v0/realtime"
-    c.ws, _, err := websocket.DefaultDialer.Dial(url, nil)
+    ws, _, err := websocket.DefaultDialer.Dial(url, nil)
+    c.ws = ws
     if err != nil {
         log.Println(err)
         return nil, errors.New("Error initializing connection")
@@ -36,7 +38,7 @@ func NewClient(url string) (*client, error) {
     c.methodAdd = make(chan methodAdd, 0)
     c.methodReceive = make(chan *common.OutgoingMessage, 0)
     c.newUID = make(chan uint64, 5)
-    c.methodsRunning = make(map[uint64]interface{})
+    c.methodsRunning = make(map[uint64] chan common.OutgoingMessage)
 
     go c.handleClient()
     return &c, nil
@@ -47,10 +49,10 @@ func (c *client) handleClient() {
 
     // Generate New UIDs
     go func() {
-        for i := uint64(0); ; i++ {
-            newUID <- i
+        for i := uint64(1); ; i++ {
+            c.newUID <- i
         }
-    }
+    }()
 
     // Method Handler Thread
     go func() {
@@ -58,28 +60,28 @@ func (c *client) handleClient() {
             select {
             case m := <- c.methodAdd:
                 c.methodsRunning[m.id] = m.result
-                close(m.added)
             case r := <- c.methodReceive:
                 methodId := r.Id
-                c.methodsRunning[methodId] <- r
+                c.methodsRunning[methodId] <- *r
                 close(c.methodsRunning[methodId])
                 delete(c.methodsRunning,methodId)
             }
         }
-    }
+    }()
 
     // Read Thread
     go func() {
         for {
-            _, raw, err := ws.ReadMessage()
+            _, raw, err := c.ws.ReadMessage()
             if err != nil {
-                if websocket.IsCloseError(err)
+                if websocket.IsCloseError(err) {
                     return
+                }
                 log.Println(err)
                 continue
             }
             var msg common.OutgoingMessage
-            err := json.Unmarshal(raw, &msg)
+            err = json.Unmarshal(raw, &msg)
             if err != nil {
                 log.Println(err)
                 continue
@@ -91,7 +93,7 @@ func (c *client) handleClient() {
                 log.Println("Unknown server message\n%s", string(raw))
             }
         }
-    }
+    }()
 
     // Write Thread
     go func() {
@@ -104,29 +106,27 @@ func (c *client) handleClient() {
                 return
             }
         }
-    }
+    }()
 
     <-c.quit
 }
 
-func getUID() (uint64) {
-    return <- newUID
+func (c *client) getUID() (uint64) {
+    return <- c.newUID
 }
 
 func (c *client) runMethod(method string, obj []interface{}) ([]interface{}, uint16) {
-    var send IncommingMessage
+    var send common.IncommingMessage
     send.Type = "method"
     send.Method = method
     send.Obj = obj
-    send.Id = getUID()
+    send.Id = c.getUID()
 
     methodRequest := methodAdd{
-        result: make(chan interface{},0),
-        added: make(chan struct{},0)
+        result: make(chan common.OutgoingMessage,0),
         id: send.Id,
     }
     c.methodAdd <- methodRequest
-    <- methodRequest.added
     c.send <- send
 
     msg := <- methodRequest.result
