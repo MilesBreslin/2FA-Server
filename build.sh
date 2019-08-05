@@ -9,7 +9,7 @@ testDir() {
 }
 
 if [ "$1" == "test" ]; then
-    testDir pkg/keys
+    testDir pkg/keys/keychain
     testDir pkg/totp
     testDir pkg/realtime_api
     exit 0

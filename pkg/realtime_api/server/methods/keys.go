@@ -1,7 +1,7 @@
 package methods
 
 import (
-    "../../../keys"
+    "../../../keys/keychain"
 )
 
 func init() {
@@ -20,7 +20,7 @@ func addKey_method(in []interface{}) ([]interface{}, uint16) {
             switch secret.(type) {
             case string:
                 // Add the Key and append its Id to the output array
-                k := keys.AddKey(secret.(string))
+                k := keychain.AddKey(secret.(string))
                 out = append(out, k.Id)
             default:
                 return out, 400
@@ -39,7 +39,7 @@ func getKey_method(in []interface{}) ([]interface{}, uint16) {
         switch id.(type) {
         case float64:
             // Retrieve key, return 404 if no exist, and append key to output array
-            k, err := keys.GetKey(uint64(id.(float64)))
+            k, err := keychain.GetKey(uint64(id.(float64)))
             if err != nil {
                 return nil, 404
             }
@@ -58,7 +58,7 @@ func getKeyToken_method(in []interface{}) ([]interface{}, uint16) {
         switch id.(type) {
         case float64:
             // Retrieve key, return 404 if no exist, and append key to output array
-            k, err := keys.GetKey(uint64(id.(float64)))
+            k, err := keychain.GetKey(uint64(id.(float64)))
             if err != nil {
                 return nil, 404
             }
@@ -76,7 +76,7 @@ func getKeyToken_method(in []interface{}) ([]interface{}, uint16) {
 
 func listKeys_method(in []interface{}) ([]interface{}, uint16) {
     // No input parameters, just return the list
-    list := keys.GetList()
+    list := keychain.GetList()
 
     // Convert []uint64 to []interface{}
     out := make([]interface{},len(list))

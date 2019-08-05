@@ -1,37 +1,32 @@
-package keys
+package keychain
 
 import (
-    "../totp"
+    "../../keys"
     "errors"
 )
 
-type key struct {
-    Secret          string              `json:"secret"`
-    Id              uint64              `json:"id"`
-}
-
 // See GetKey
 type keyRequest struct {
-    Result          chan key
+    Result          chan keys.Key
     Id              uint64
 }
 
 // Declare Global Channels + KeyChain
-var add chan key
+var add chan keys.Key
 var del chan uint64
 var get chan keyRequest
 var getId chan uint64
 var getList chan chan []uint64
-var keyChain map[uint64] *key
+var keyChain map[uint64] *keys.Key
 
 func init() {
     // Initialize Global Channels + KeyChain
-    add = make(chan key, 0)
+    add = make(chan keys.Key, 0)
     del = make(chan uint64, 0)
     get = make(chan keyRequest, 0)
     getId = make(chan uint64, 4)
     getList = make(chan chan []uint64, 0)
-    keyChain = make(map[uint64] *key)
+    keyChain = make(map[uint64] *keys.Key)
 
     // Start Handling the Channel Requests
     go handleKeys()
@@ -87,12 +82,8 @@ func getUID() (uint64) {
     return <- getId
 }
 
-func (k *key) GetCode() (string, error) {
-    return totp.GetTOTPToken(k.Secret) , nil
-}
-
-func GetKey(id uint64) (*key, error) {
-    result := make(chan key, 0)
+func GetKey(id uint64) (*keys.Key, error) {
+    result := make(chan keys.Key, 0)
     get <- keyRequest {
         Result: result,
         Id: id,
@@ -109,8 +100,8 @@ func DelKey(id uint64) {
     del <- id
 }
 
-func AddKey(secret string) (*key) {
-    var key = key{
+func AddKey(secret string) (*keys.Key) {
+    var key = keys.Key{
         Secret: secret,
         Id: getUID(),
     }

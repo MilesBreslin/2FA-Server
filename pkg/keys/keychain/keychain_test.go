@@ -1,4 +1,4 @@
-package keys
+package keychain
 
 import (
     "testing"
