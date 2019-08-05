@@ -1,7 +1,7 @@
 package client
 
 import (
-    "github.com/opensource2fa/pkg/status_codes"
+    "github.com/opensource2fa/server/pkg/status_codes"
 )
 
 func (c *Client) Test(params []interface{}) ([]interface{}) {

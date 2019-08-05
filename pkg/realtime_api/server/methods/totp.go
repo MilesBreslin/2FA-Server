@@ -1,7 +1,7 @@
 package methods
 
 import (
-    "github.com/opensource2fa/pkg/totp"
+    "github.com/opensource2fa/server/pkg/totp"
 )
 
 func init() {

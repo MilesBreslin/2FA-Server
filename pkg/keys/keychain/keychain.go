@@ -1,7 +1,7 @@
 package keychain
 
 import (
-    "github.com/opensource2fa/pkg/keys"
+    "github.com/opensource2fa/server/pkg/keys"
     "errors"
 )
 
