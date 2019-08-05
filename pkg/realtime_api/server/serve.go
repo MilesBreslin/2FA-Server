@@ -6,7 +6,7 @@ import (
     "github.com/opensource2fa/server/pkg/keys/keychain"
     "encoding/json"
     "github.com/gorilla/websocket"
-    "github.com/opensource2fa/server/pkg/realtime_api/methods"
+    "github.com/opensource2fa/server/pkg/realtime_api/server/methods"
     "net/http"
     "log"
     "time"
