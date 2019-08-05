@@ -29,3 +29,31 @@ func TestTestFunc(t *testing.T) {
         t.Errorf("Expecting test to receive %v, but got %v", arr, r)
     }
 }
+
+func TestKeys(t *testing.T) {
+    c, err := startClientServer()
+    if err != nil {
+        t.Errorf("%v",err)
+        return
+    }
+    key, err := c.GetKey(0)
+    if err == nil {
+        t.Errorf("Tried to get key 0 before every adding any keys and got no error")
+    }
+    if key != nil {
+        t.Errorf("Returned key pointer is not nil, when expecting empty pointer")
+    }
+    exampleSecret := "lhe4kfhfqapxipzmohswb6i5adg2gauh"
+    id, err := c.AddKey(exampleSecret)
+    if err != nil {
+        t.Errorf("Error adding initial key: %v", err)
+    }
+    if id == 0 {
+        t.Errorf("First added key id is 0, expecting 1 or higher")
+    }
+    key, err = c.GetKey(id)
+    if err != nil {
+        t.Errorf("Error retrieving first added key: %v", err)
+    }
+
+}
