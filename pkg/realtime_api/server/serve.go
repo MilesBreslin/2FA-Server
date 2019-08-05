@@ -3,11 +3,13 @@ package server
 import (
     "../common"
     "../../status_codes"
+    "../../keys/keychain"
     "encoding/json"
     "github.com/gorilla/websocket"
     "./methods"
     "net/http"
     "log"
+    "time"
 )
 
 func HandleServe(w http.ResponseWriter, r *http.Request) {
@@ -65,7 +67,35 @@ func HandleServe(w http.ResponseWriter, r *http.Request) {
                 reply.Result = status_codes.OK
             case "subscribe":
                 log.Println("Subscribe")
-                reply.Result = status_codes.ACCEPTED
+                for _, id := range msg.Obj {
+                    switch id.(type) {
+                    case float64:
+                        // Retrieve key, return 404 if no exist, and append key to output array
+                        k, err := keychain.GetKey(uint64(id.(float64)))
+                        reply.Result = status_codes.ACCEPTED
+                        go func(id uint64) {
+                            var subMsg common.OutgoingMessage
+                            subMsg.Type = "update"
+                            subMsg.Id = msg.Id
+                            for {
+                                token, _ := k.GetCode()
+                                subMsg.Obj = []interface{}{
+                                    struct{Token string `json:"token"`}{
+                                        Token: token,
+                                    },
+                                }
+                                subMsgRaw, _ := json.Marshal(&subMsg)
+                                ws.WriteMessage(websocket.TextMessage, subMsgRaw)
+                                time.Sleep(30*time.Second)
+                            }
+                        }(msg.Id)
+                        if err != nil {
+                            reply.Result = status_codes.NOT_FOUND
+                        }
+                    default:
+                        reply.Result = status_codes.BAD_REQUEST
+                    }
+                }
             }
         } else {
             reply.Result = status_codes.BAD_REQUEST
