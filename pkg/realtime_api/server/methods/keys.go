@@ -2,6 +2,7 @@ package methods
 
 import (
     "../../../keys/keychain"
+    "../../../status_codes"
 )
 
 func init() {
@@ -23,13 +24,13 @@ func addKey_method(in []interface{}) ([]interface{}, uint16) {
                 k := keychain.AddKey(secret.(string))
                 out = append(out, k.Id)
             default:
-                return out, 400
+                return out, status_codes.BAD_REQUEST
             }
         } else {
-            return out, 400
+            return out, status_codes.BAD_REQUEST
         }
     }
-    return out, 200
+    return out, status_codes.OK
 }
 
 func getKey_method(in []interface{}) ([]interface{}, uint16) {
@@ -41,14 +42,14 @@ func getKey_method(in []interface{}) ([]interface{}, uint16) {
             // Retrieve key, return 404 if no exist, and append key to output array
             k, err := keychain.GetKey(uint64(id.(float64)))
             if err != nil {
-                return nil, 404
+                return nil, status_codes.NOT_FOUND
             }
             out = append(out, *k)
         default:
-            return nil, 400
+            return nil, status_codes.BAD_REQUEST
         }
     }
-    return out, 200
+    return out, status_codes.OK
 }
 
 func getKeyToken_method(in []interface{}) ([]interface{}, uint16) {
@@ -60,18 +61,18 @@ func getKeyToken_method(in []interface{}) ([]interface{}, uint16) {
             // Retrieve key, return 404 if no exist, and append key to output array
             k, err := keychain.GetKey(uint64(id.(float64)))
             if err != nil {
-                return nil, 404
+                return nil, status_codes.NOT_FOUND
             }
             code, err := k.GetCode()
             if err != nil {
-                return nil, 500
+                return nil, status_codes.INTERNAL_SERVER_ERROR
             }
             out = append(out, code)
         default:
-            return nil, 400
+            return nil, status_codes.BAD_REQUEST
         }
     }
-    return out, 200
+    return out, status_codes.OK
 }
 
 func listKeys_method(in []interface{}) ([]interface{}, uint16) {
@@ -83,5 +84,5 @@ func listKeys_method(in []interface{}) ([]interface{}, uint16) {
     for index, val := range list {
         out[index] = val
     }
-    return out, 200
+    return out, status_codes.OK
 }

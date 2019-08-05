@@ -2,6 +2,7 @@ package server
 
 import (
     "../common"
+    "../../status_codes"
     "encoding/json"
     "github.com/gorilla/websocket"
     "./methods"
@@ -36,7 +37,7 @@ func HandleServe(w http.ResponseWriter, r *http.Request) {
         // Create Basic Reply Message
         var reply common.OutgoingMessage
         reply.Type = "result"
-        reply.Result = 500
+        reply.Result = status_codes.INTERNAL_SERVER_ERROR
 
         // Check if is Valid JSON and convert to incommingMessage structure
         var msg common.IncommingMessage
@@ -57,17 +58,17 @@ func HandleServe(w http.ResponseWriter, r *http.Request) {
                 if m, ok := methods.Get(msg.Method); ok {
                     reply.Obj, reply.Result = m(msg.Obj)
                 } else {
-                    reply.Result = 400
+                    reply.Result = status_codes.BAD_REQUEST
                 }
             case "lookup":
                 log.Println("Lookup")
-                reply.Result = 200
+                reply.Result = status_codes.OK
             case "subscribe":
                 log.Println("Subscribe")
-                reply.Result = 202
+                reply.Result = status_codes.ACCEPTED
             }
         } else {
-            reply.Result = 400
+            reply.Result = status_codes.BAD_REQUEST
         }
 
         // Send Reply
