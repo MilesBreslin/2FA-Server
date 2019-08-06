@@ -1,4 +1,4 @@
-default: fromScratch
+default: travis
 
 travis: link fromScratch
 
