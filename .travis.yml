@@ -1,3 +1,1 @@
 language: go
-before_script: ./build.sh deps
-script: ./build.sh test
