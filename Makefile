@@ -1,4 +1,4 @@
 default: fromScratch
 
 fromScratch:
-    ./build.sh fromscratch
+	./build.sh fromscratch
