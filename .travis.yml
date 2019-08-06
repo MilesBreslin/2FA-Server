@@ -1,2 +1,3 @@
-language: python
-script: ./build.sh fromscratch
+language: go
+before_script: ./build.sh deps
+script: ./build.sh test
