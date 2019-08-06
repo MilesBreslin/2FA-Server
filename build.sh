@@ -8,6 +8,15 @@ testDir() {
     cd "$init_dir"
 }
 
+PROJECT_NAME="github.com/opensource2fa/server"
+PROJECT_PATH="$GOPATH/src/$PROJECT_NAME"
+if [ "$PWD" != "$PROJECT_PATH" ]; then
+    if ! [ -e "$PROJECT_PATH" ]; then
+        mkdir -p "$GOPATH/src/github.com/opensource2fa"
+        ln -s "$PROJECT_PATH" "$PWD"
+    fi
+fi
+
 if [ "$1" == "test" ]; then
     testDir pkg/keys/keychain
     testDir pkg/totp
