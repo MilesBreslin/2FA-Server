@@ -66,30 +66,30 @@ func HandleServe(w http.ResponseWriter, r *http.Request) {
                 log.Println("Lookup")
                 reply.Result = status_codes.OK
             case "subscribe":
-                log.Println("Subscribe")
                 for _, id := range msg.Obj {
                     switch id.(type) {
                     case float64:
                         // Retrieve key, return 404 if no exist, and append key to output array
                         k, err := keychain.GetKey(uint64(id.(float64)))
                         reply.Result = status_codes.ACCEPTED
-                        go func(id uint64) {
-                            var subMsg common.OutgoingMessage
-                            subMsg.Type = "update"
-                            subMsg.Id = msg.Id
-                            for {
-                                token, _ := k.GetCode()
-                                subMsg.Obj = []interface{}{
-                                    struct{Token string `json:"token"`}{
-                                        Token: token,
-                                    },
+                        if err == nil {
+                            go func(id uint64) {
+                                var subMsg common.OutgoingMessage
+                                subMsg.Type = "update"
+                                subMsg.Id = msg.Id
+                                for {
+                                    token, _ := k.GetCode()
+                                    subMsg.Obj = []interface{}{
+                                        struct{Token string `json:"token"`}{
+                                            Token: token,
+                                        },
+                                    }
+                                    subMsgRaw, _ := json.Marshal(&subMsg)
+                                    ws.WriteMessage(websocket.TextMessage, subMsgRaw)
+                                    time.Sleep(30*time.Second)
                                 }
-                                subMsgRaw, _ := json.Marshal(&subMsg)
-                                ws.WriteMessage(websocket.TextMessage, subMsgRaw)
-                                time.Sleep(30*time.Second)
-                            }
-                        }(msg.Id)
-                        if err != nil {
+                            }(msg.Id)
+                        } else {
                             reply.Result = status_codes.NOT_FOUND
                         }
                     default:
