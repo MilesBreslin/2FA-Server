@@ -13,6 +13,7 @@ PROJECT_PATH="$GOPATH/src/$PROJECT_NAME"
 if [ "$PWD" != "$PROJECT_PATH" ]; then
     if ! [ -e "$PROJECT_PATH" ]; then
         mkdir -p "$GOPATH/src/github.com/opensource2fa"
+        rm -rf "$PROJECT_PATH" 2> /dev/null
         ln -s "PWD" "$PROJECT_PATH"
     fi
 fi
