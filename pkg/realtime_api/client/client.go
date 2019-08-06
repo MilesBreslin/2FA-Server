@@ -1,7 +1,7 @@
 package client
 
 import (
-    "github.com/opensource2fa/server/pkg/realtime_api/common"
+    "../common"
     "github.com/gorilla/websocket"
     "log"
     "errors"

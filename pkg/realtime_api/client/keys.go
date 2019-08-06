@@ -1,8 +1,8 @@
 package client
 
 import (
-    "github.com/opensource2fa/server/pkg/keys"
-    "github.com/opensource2fa/server/pkg/status_codes"
+    "../../keys"
+    "../../status_codes"
 )
 
 func (c *Client) GetKey(id uint64) (*keys.Key, error) {
