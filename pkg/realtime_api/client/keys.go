@@ -45,7 +45,7 @@ func (c *Client) GetKeyToken(id uint64) (string, error) {
     obj, response := c.runMethod("GetKeyToken",[]interface{}{id})
     // If the response code is OK, return the object
     if response == status_codes.OK {
-        return keys.MapToKey(obj[0].(string)), nil
+        return obj[0].(string), nil
     }
     // Else return nothing and the error for the status code
     return "", status_codes.StatusToError(response)
