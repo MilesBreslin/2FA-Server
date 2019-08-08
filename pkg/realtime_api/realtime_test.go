@@ -61,4 +61,9 @@ func TestKeys(t *testing.T) {
         t.Errorf("Error retrieving listing keys, expecting [%d]: %v", id, list)
     }
 
+    token, err := c.GetKeyToken(id)
+    if len(token) == 6 {
+        t.Errorf("Error retrieving getting key token: %v", token)
+    }
+
 }
