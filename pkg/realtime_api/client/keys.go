@@ -48,5 +48,5 @@ func (c *Client) GetKeyToken(id uint64) (string, error) {
         return keys.MapToKey(obj[0].(string)), nil
     }
     // Else return nothing and the error for the status code
-    return nil, status_codes.StatusToError(response)
+    return "", status_codes.StatusToError(response)
 }
