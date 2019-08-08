@@ -27,3 +27,15 @@ func (c *Client) AddKey(secret string) (uint64, error) {
     }
     return 0, status_codes.StatusToError(response)
 }
+
+func (c *Client) ListKeys() ([]uint64, error) {
+    obj, response := c.runMethod("AddKey",nil)
+    if response == status_codes.OK {
+        ret = make([]float64, len(obj))
+        for index, val := range obj {
+            ret[index] = uint64(val.(float64))
+        }
+        return ret, nil
+    }
+    return 0, status_codes.StatusToError(response)
+}
