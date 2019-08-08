@@ -48,8 +48,6 @@ func main() {
             fmt.Println(err)
             return
         }
-        //var i uint64 = 0
-        //for {
         key, err := c.GetKey(id)
         if err != nil {
             fmt.Println(err)
@@ -57,9 +55,17 @@ func main() {
         }
         token := totp.GetTOTPToken(key.Secret)
         fmt.Println("2FA Token:", token)
-            //i++
-            //}
-        } else if strings.Compare("total-keys", arg) == 0 {
-
+        } else if strings.Compare("list-keys", arg) == 0 {
+        c, err := client.NewClient(url)
+        if err != nil {
+            fmt.Println(err)
+            return
+        }
+        key, err := c.ListKeys()
+        if err != nil {
+            fmt.Println(err)
+            return 
+        }
+        fmt.Println(key)
         }
     }
