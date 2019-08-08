@@ -31,11 +31,11 @@ func (c *Client) AddKey(secret string) (uint64, error) {
 func (c *Client) ListKeys() ([]uint64, error) {
     obj, response := c.runMethod("AddKey",nil)
     if response == status_codes.OK {
-        ret = make([]uint64, len(obj))
+        ret := make([]uint64, len(obj))
         for index, val := range obj {
             ret[index] = uint64(val.(float64))
         }
         return ret, nil
     }
-    return 0, status_codes.StatusToError(response)
+    return nil, status_codes.StatusToError(response)
 }
