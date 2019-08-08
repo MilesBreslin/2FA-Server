@@ -56,4 +56,9 @@ func TestKeys(t *testing.T) {
         t.Errorf("Error retrieving first added key: %v", err)
     }
 
+    list, err := c.ListKeys()
+    if len(list) != 1 || list[0] != id {
+        t.Errorf("Error retrieving listing keys, expecting [%d]: %v", id, list)
+    }
+
 }
