@@ -31,7 +31,7 @@ func (c *Client) AddKey(secret string) (uint64, error) {
 func (c *Client) ListKeys() ([]uint64, error) {
     obj, response := c.runMethod("AddKey",nil)
     if response == status_codes.OK {
-        ret = make([]float64, len(obj))
+        ret = make([]uint64, len(obj))
         for index, val := range obj {
             ret[index] = uint64(val.(float64))
         }
