@@ -62,7 +62,7 @@ func TestKeys(t *testing.T) {
     }
 
     token, err := c.GetKeyToken(id)
-    if len(token) == 6 {
+    if len(token) != 6 {
         t.Errorf("Error retrieving getting key token: %v", token)
     }
 
