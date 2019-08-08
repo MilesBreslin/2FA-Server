@@ -29,7 +29,7 @@ func (c *Client) AddKey(secret string) (uint64, error) {
 }
 
 func (c *Client) ListKeys() ([]uint64, error) {
-    obj, response := c.runMethod("AddKey",nil)
+    obj, response := c.runMethod("ListKeys",nil)
     if response == status_codes.OK {
         ret := make([]uint64, len(obj))
         for index, val := range obj {
