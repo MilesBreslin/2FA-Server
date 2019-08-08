@@ -5,8 +5,8 @@ import (
     "os"
     "strings"
     //"strconv"
-    "github.com/opensource2fa/server/pkg/realtime_api/client"
-    "github.com/opensource2fa/server/pkg/totp"
+    "../../pkg/realtime_api/client"
+    "../../pkg/totp"
     /*"github.com/opensource2fa/server/pkg/realtime_api/server"
     "net/http/httptest"
     "net/http"*/
