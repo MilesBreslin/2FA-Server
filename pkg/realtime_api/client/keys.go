@@ -42,7 +42,7 @@ func (c *Client) ListKeys() ([]uint64, error) {
 
 func (c *Client) GetKeyToken(id uint64) (string, error) {
     // Send the request and wait for the return object and response code
-    obj, response := c.runMethod("GetKey",[]interface{}{id})
+    obj, response := c.runMethod("GetKeyToken",[]interface{}{id})
     // If the response code is OK, return the object
     if response == status_codes.OK {
         return keys.MapToKey(obj[0].(string)), nil
