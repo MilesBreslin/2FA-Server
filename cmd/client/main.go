@@ -4,9 +4,9 @@ import (
     "fmt"
     "os"
     "strings"
-    //"strconv"
+    "strconv"
     "../../pkg/realtime_api/client"
-    "../../pkg/totp"
+    // "../../pkg/totp"
     /*"github.com/opensource2fa/server/pkg/realtime_api/server"
     "net/http/httptest"
     "net/http"*/
@@ -23,13 +23,11 @@ func main() {
     // get the command
     arg := os.Args[3]
 
-    fmt.Println("Running:", arg, "on URL:", url)
     // add a key to the server
     if strings.Compare("add-key", arg) == 0 {
         // get the key
         key := os.Args[4]
-        //key := "lhe4kfhfqapxipzmohswb6i5adg2gauh"
-        fmt.Println(key)
+        // example key "lhe4kfhfqapxipzmohswb6i5adg2gauh"
         c, err := client.NewClient(url)
         if err != nil {
             fmt.Println(err)
@@ -40,22 +38,46 @@ func main() {
             fmt.Println(err)
             return
         }
-        fmt.Println("This key has been stored with the ID: %i", id)
+        fmt.Println("This key has been stored with the ID:", id)
+        // get a key
     } else if strings.Compare("get-key", arg) == 0 {
-        id := os.Args[4]
+        id_string := os.Args[4]
         c, err := client.NewClient(url)
         if err != nil {
             fmt.Println(err)
             return
+        }
+        // string to convert to uint64
+        id, err := strconv.ParseUint(id_string, 10, 64)
+        if err != nil {
+            fmt.Println(err)
         }
         key, err := c.GetKey(id)
         if err != nil {
             fmt.Println(err)
             return 
         }
-        token := totp.GetTOTPToken(key.Secret)
-        fmt.Println("2FA Token:", token)
-        } else if strings.Compare("list-keys", arg) == 0 {
+        fmt.Println("ID:", key.Id, "Key:", key.Secret)
+        // get the token
+    } else if strings.Compare("get-token", arg) == 0 {
+        id_string := os.Args[4]
+        c, err := client.NewClient(url)
+        if err != nil {
+            fmt.Println(err)
+            return
+        }
+        // string to convert to uint64
+        id, err := strconv.ParseUint(id_string, 10, 64)
+        if err != nil {
+            fmt.Println(err)
+        }
+        // get the token
+        key, err := c.GetKeyToken(id)
+        fmt.Println("Token:", key)
+
+        // list all IDs
+    } else if strings.Compare("list-keys", arg) == 0 || 
+              strings.Compare("list-tokens", arg) == 0{
         c, err := client.NewClient(url)
         if err != nil {
             fmt.Println(err)
@@ -66,6 +88,9 @@ func main() {
             fmt.Println(err)
             return 
         }
-        fmt.Println(key)
-        }
+        fmt.Println("Stored IDs:", key)
+        // error, user input command does not exist
+    } else {
+        fmt.Println("2FA Unkown command:", arg)
     }
+}
