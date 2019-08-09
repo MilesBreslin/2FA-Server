@@ -1,4 +1,4 @@
-![Build Status](https://travis-ci.org/opensource2fa/Server.svg?branch=master)](https://travis-ci.org/opensource2fa/Server)
+[![Build Status](https://travis-ci.org/opensource2fa/Server.svg?branch=master)](https://travis-ci.org/opensource2fa/Server)
 Copyright (c) 2019 Miles Breslin Robert Pelayo
 
 # 2FA Server
