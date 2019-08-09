@@ -22,7 +22,7 @@ When the root of the repository, to start the server run:
  ./build/server
  ```
 
-All client commands must begin with the following, if in the root of the repository:
+Leave the terminal open to keep the connection alive. Open a new terminal window to use the client. **All** client commands must begin with the following, if in the root of the repository:
 ```sh
  ./build/client --url ws://localhost:8000
  ```
@@ -32,13 +32,27 @@ To add a key enter:
 ```sh
  ./build/client --url ws://localhost:8000 add-key lhe4kfhfqapxipzmohswb6i5adg2gauh
  ```
+ 
 This code will add the key: `lhe4kfhfqapxipzmohswb6i5adg2gauh` to the server so it can now generate a one time token. The displayed ID will be where the token is stored, for access later.
-#### Get key
-To get a token:
+
+#### Get token
+To get the first token:
 ```sh
- ./build/client --url ws://localhost:8000 get-key-token 1
+ ./build/client --url ws://localhost:8000 get-token 1
  ```
-This command will display token ID 1 to standard out. 
+
+#### Get key
+To get the first key from the server:
+```sh
+ ./build/client --url ws://localhost:8000 get-key 1
+ ```
+ 
+ #### List keys
+ To list all IDs stored:
+ ```sh
+ ./build/client --url ws://localhost:8000 list-keys
+ ```
+ 
 ### License
 
 This repository is licensed under the MIT License. See the `LICENSE` file for license conditions and details.
