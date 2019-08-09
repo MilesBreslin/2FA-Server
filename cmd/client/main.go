@@ -6,16 +6,7 @@ import (
     "strings"
     "strconv"
     "../../pkg/realtime_api/client"
-    // "../../pkg/totp"
-    /*"github.com/opensource2fa/server/pkg/realtime_api/server"
-    "net/http/httptest"
-    "net/http"*/
-    // "github.com/opensource2fa/server/pkg/keys/keychain"
 )
-// TODO: Close out the server connection
-// TODO: Cycle through all the gotten keys?
-// TODO: How do we want to deal with getting the name for the appropriate keys maybe add name field
-// TODO: return count of the number of keys?
 func main() {
     // pull the url
     url := os.Args[2] + "/api/v0/realtime"
