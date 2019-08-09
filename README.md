@@ -16,7 +16,7 @@ To build, open a shell in the root of the repo and run the following:
 It will generate a new folder called `build` and inside of that, there will be a server
 executable file. Run that.
 
-### Example Run
+### Example Usage
 When the root of the repository, to start the server run:
 ```sh
  ./build/server
