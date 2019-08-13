@@ -31,7 +31,9 @@ Leave the terminal open to keep the connection alive. Open a new terminal window
 ```sh
 ./build/client --url ws://localhost:8000
 ```
- 
+
+You can add this as an alias to your bashrc file to configure this for your shell.
+
 #### Add key 
 
 To add a key enter:
