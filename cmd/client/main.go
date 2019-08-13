@@ -35,11 +35,6 @@ func main() {
     
     // we will add in the version 
     url := os.Args[2] + "/api/v0/realtime"
-    if strings.Compare("ws://localhost:8000", os.Args[2]) != 0{
-        fmt.Println("2FA: Error argument:", os.Args[2])
-        fmt.Println("Please enter the url as ws://localhost:8000")
-        return
-    }
 
     // get the command
     arg := os.Args[3]
