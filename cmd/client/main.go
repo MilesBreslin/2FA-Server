@@ -52,6 +52,7 @@ func main() {
         c, err := client.NewClient(url)
         if err != nil {
             fmt.Println(err)
+            fmt.Println("Please check you entered the correct url.")
             return
         }
         id, err := c.AddKey(key)
@@ -71,6 +72,7 @@ func main() {
         c, err := client.NewClient(url)
         if err != nil {
             fmt.Println(err)
+            fmt.Println("Please check you entered the correct url.")
             return
         }
         // string to convert to uint64
@@ -94,6 +96,7 @@ func main() {
         c, err := client.NewClient(url)
         if err != nil {
             fmt.Println(err)
+            fmt.Println("Please check you entered the correct url.")
             return
         }
         // string to convert to uint64
@@ -115,6 +118,7 @@ func main() {
         c, err := client.NewClient(url)
         if err != nil {
             fmt.Println(err)
+            fmt.Println("Please check you entered the correct url.")
             return
         }
         key, err := c.ListKeys()
