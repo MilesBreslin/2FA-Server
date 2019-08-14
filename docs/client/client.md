@@ -41,4 +41,4 @@ To retrieve a token:
 ```bash
 ./build/client --url ws://localhost:8000 get-token 1
 ```
-With this command, the client will call the `GetKeyToken` method and pass in the UID 1 to return the OTP token. 
+With this command, the client will call the `GetKeyToken` method and pass in the UID 1 to return the OTP token. This number can be changed to return the desired token within the index. If the entered key was not long enough, the client will return a message indicating failure and recommendation to remove the invalid key (removal to be implemented).
